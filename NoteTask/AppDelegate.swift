@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -32,6 +33,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
     }
 
-
+    lazy var persistentContainer: NSPersistentContainer = {
+        let conteiner = NSPersistentContainer(name: "Notes")
+        conteiner.loadPersistentStores(completionHandler:{ (storeDiscription, error) in
+            if let error = error as NSError? {
+                fatalError("error has occured")
+            }
+            
+        })
+        return conteiner
+    }()
+    
+    func saveContext() {
+        let context = persistentContainer.viewContext
+        if context.hasChanges {
+            do {
+                try context.save()
+            }catch {
+                _ = error as NSError
+                fatalError("Error")
+            }
+        }
+    }
 }
 
